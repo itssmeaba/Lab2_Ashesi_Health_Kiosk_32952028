@@ -7,22 +7,27 @@ public class HealthKiosk {
         //task 1: service code
         System.out.print("Enter service code (P/L/T/C): ");
         String serviceCode = input.nextLine();
+        String service = "";
 
         switch (serviceCode) {
             case "P":
             case "p":
+                service = "PHARMACY";
                 System.out.println("Go to: Pharmacy Desk");
                 break;
             case "L":
             case "l":
+                service = "LAB";
                 System.out.println("Go to: Lab Desk");
                 break;
             case "T":
             case "t":
+                service ="TRIAGE";
                 System.out.println("Go to: Triage Desk");
                 break;
             case "C":
             case "c":
+                service = "COUNSELLING";
                 System.out.println("Go to: Counselling Desk");
                 break;
             default:
@@ -34,6 +39,11 @@ public class HealthKiosk {
             System.out.print("Kindly enter a health metric: ");
             int metric = input.nextInt();
 
+            double bmiRounded = 0;
+            int tablets = 0;
+            double sinRounded = 0;
+            double cosRounded = 0;
+
             switch (metric) {
                 case 1:
                     System.out.print("Kindly enter your weight (in kg): ");
@@ -41,7 +51,7 @@ public class HealthKiosk {
                     System.out.print("Kindly enter your height (in m): ");
                     double height = input.nextDouble();
                     double bmi = weight / (height * height);
-                    double bmiRounded = Math.round(bmi * 10) / 10.0;
+                    bmiRounded = Math.round(bmi * 10) / 10.0;
                     System.out.print("BMI: " + bmiRounded);
                     if (bmiRounded < 18.5) {
                         System.out.println("  Category: Underweight");
@@ -57,7 +67,7 @@ public class HealthKiosk {
                     System.out.print("Kindly enter your dosage (in mg): ");
                     double dosage = input.nextDouble();
                     double tabletDosage = 250.0;
-                    int tablets = (int) Math.ceil(dosage / tabletDosage);
+                    tablets = (int) Math.ceil(dosage / tabletDosage);
                     System.out.println("Number of tablets is " + tablets);
                     break;
                 case 3:
@@ -68,12 +78,55 @@ public class HealthKiosk {
                     double sinValue = Math.sin(radians);
                     double cosValue = Math.cos(radians);
 
-                    double sinRounded = Math.round(sinValue * 1000) / 1000.0;
-                    double cosRounded = Math.round(cosValue * 1000) / 1000.0;
+                    sinRounded = Math.round(sinValue * 1000) / 1000.0;
+                    cosRounded = Math.round(cosValue * 1000) / 1000.0;
+                    System.out.println("sin: " + sinRounded + ", cos: " + cosRounded);
 
                     break;
             }
 
-        }
+            //task 3
+            char randomLetter = (char)(65 + (int)(Math.random()*26));
+            int no1 = 3 + (int)(Math.random()*7);
+            int no2 = 3 + (int)(Math.random()*7);
+            int no3 = 3 + (int)(Math.random()*7);
+            int no4 = 3 + (int)(Math.random()*7);
+
+            String studentID = "" + randomLetter + no1 + no2 + no3 + no4;
+
+            if (studentID.length()!=5){
+                System.out.println("Invalid length");
+            }else if (!Character.isLetter(studentID.charAt(0))){
+                System.out.println("Invalid: First char must be a letter");
+            }else if (!Character.isDigit(studentID.charAt(1)) ||
+                    !Character.isDigit(studentID.charAt(2)) ||
+                    !Character.isDigit(studentID.charAt(3)) ||
+                    !Character.isDigit(studentID.charAt(4)) ){
+                System.out.println("Invalid: Last 4 chars must be digits");
+            }else{
+                System.out.println("Valid ID");
+            }
+
+            //task 4
+            input.nextLine();
+            System.out.print("Kindly enter your name: ");
+            String name = input.nextLine();
+            char baseCode = Character.toUpperCase(name.charAt(0));
+            char shiftedLetter = (char)('A' + (baseCode - 'A' + 2) % 26);
+
+            String code = "";
+
+            if (metric==1){
+               code = shiftedLetter + no3 + no4 + "-" + bmiRounded;
+            } else if (metric==2){
+                code = shiftedLetter + no3 + no4 + "-" + tablets ;
+            } else if (metric==3){
+                code = shiftedLetter + no3 + no4 + "-" + sinRounded;
+            }
+
+            System.out.println("Display code: " + code);
+
+            //task 5
+            System.out.println(service + " | ID=" + studentID + "| Code=" + code);
     }
 }
