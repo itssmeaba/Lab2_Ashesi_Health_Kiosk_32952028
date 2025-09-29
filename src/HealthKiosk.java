@@ -32,7 +32,7 @@ public class HealthKiosk {
                 break;
             default:
                 System.out.println("Invalid service code");
-                break;
+                return;
         }
                 //task 2: health metric
 
@@ -43,16 +43,20 @@ public class HealthKiosk {
             int tablets = 0;
             double sinRounded = 0;
             double cosRounded = 0;
+            int metricValue = 0;
 
             switch (metric) {
                 case 1:
                     System.out.print("Kindly enter your weight (in kg): ");
                     double weight = input.nextDouble();
+
                     System.out.print("Kindly enter your height (in m): ");
                     double height = input.nextDouble();
                     double bmi = weight / (height * height);
                     bmiRounded = Math.round(bmi * 10) / 10.0;
+
                     System.out.print("BMI: " + bmiRounded);
+
                     if (bmiRounded < 18.5) {
                         System.out.println("  Category: Underweight");
                     } else if (bmiRounded >= 18.5 && bmiRounded <= 24.9) {
@@ -62,14 +66,19 @@ public class HealthKiosk {
                     } else if (bmiRounded >= 30) {
                         System.out.println("  Category: Obese");
                     }
+
+                    metricValue = (int)Math.round(bmi);
                     break;
                 case 2:
                     System.out.print("Kindly enter your dosage (in mg): ");
                     double dosage = input.nextDouble();
                     double tabletDosage = 250.0;
+
                     tablets = (int) Math.ceil(dosage / tabletDosage);
                     System.out.println("Number of tablets is " + tablets);
+                    metricValue = tablets;
                     break;
+
                 case 3:
                     System.out.print("Kindly enter a angle (in degrees): ");
                     double angle = input.nextDouble();
@@ -82,7 +91,13 @@ public class HealthKiosk {
                     cosRounded = Math.round(cosValue * 1000) / 1000.0;
                     System.out.println("sin: " + sinRounded + ", cos: " + cosRounded);
 
+                    metricValue = (int)Math.round(sinValue * 100);
+
                     break;
+
+                default:
+                    System.out.println("Invalid input");
+                    return;
             }
 
             //task 3
@@ -96,37 +111,36 @@ public class HealthKiosk {
 
             if (studentID.length()!=5){
                 System.out.println("Invalid length");
+                return;
             }else if (!Character.isLetter(studentID.charAt(0))){
                 System.out.println("Invalid: First char must be a letter");
+                return;
             }else if (!Character.isDigit(studentID.charAt(1)) ||
                     !Character.isDigit(studentID.charAt(2)) ||
                     !Character.isDigit(studentID.charAt(3)) ||
                     !Character.isDigit(studentID.charAt(4)) ){
                 System.out.println("Invalid: Last 4 chars must be digits");
+                return;
             }else{
-                System.out.println("Valid ID");
+                System.out.println(studentID);
+                System.out.println("ID OK");
             }
 
             //task 4
             input.nextLine();
             System.out.print("Kindly enter your name: ");
             String name = input.nextLine();
+
             char baseCode = Character.toUpperCase(name.charAt(0));
             char shiftedLetter = (char)('A' + (baseCode - 'A' + 2) % 26);
 
-            String code = "";
+            char digit3 = studentID.charAt(3);
+            char digit4 = studentID.charAt(4);
 
-            if (metric==1){
-               code = shiftedLetter + no3 + no4 + "-" + bmiRounded;
-            } else if (metric==2){
-                code = shiftedLetter + no3 + no4 + "-" + tablets ;
-            } else if (metric==3){
-                code = shiftedLetter + no3 + no4 + "-" + sinRounded;
-            }
-
+            String code = "" + shiftedLetter + digit3 + digit4 + "-" + metricValue;
             System.out.println("Display code: " + code);
 
             //task 5
-            System.out.println(service + " | ID=" + studentID + "| Code=" + code);
+            System.out.println(service + " | ID=" + studentID + " | Code=" + code);
     }
 }
